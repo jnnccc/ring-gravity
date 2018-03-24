@@ -1,0 +1,16 @@
+
+grid.o: \
+	lib_array.o \
+	param.o 
+
+integu.o: \
+	param.o 
+
+quadring.o: \
+	quadring.o 
+
+readriv.o: \
+	param.o 
+
+ringrav.o: \
+	param.o 

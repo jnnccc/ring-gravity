@@ -1,0 +1,3 @@
+#! /bin/bash
+
+ifort -traceback param.f90 lib_array.f90 module_grav.f90 force_ring.f90 saturn_grv.f90 -lspice -o saturn

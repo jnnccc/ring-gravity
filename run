@@ -1,0 +1,4 @@
+#! /bin/bash
+#run 1 input/saturn_grv4 50 10 1.1 .14 -30 30
+#./saturn 1 saturn_grv8 
+./saturn "$@" 

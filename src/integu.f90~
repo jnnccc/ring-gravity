@@ -1,0 +1,43 @@
+subroutine integu(u,i,j,k)
+use para
+implicit none
+
+real*8:: u
+REAL*8 X(3,2),Y(3,2),DATA(4500),RES,ERR,theta1,theta2
+INTEGER IWORK(1000),NU,ND,NEVALS,IFLAG,ID(3),i,j,k
+EXTERNAL F
+id(1)=i
+id(2)=j
+id(3)=k
+!print*,id
+theta1=0.d0
+theta2=2.d0*pi
+X(1,1)=r1
+Y(1,1)=theta1
+X(2,1)=r2
+Y(2,1)=theta1
+X(3,1)=r2
+Y(3,1)=theta2
+X(1,2)=r1
+Y(1,2)=theta1
+X(2,2)=r2
+Y(2,2)=theta2
+X(3,2)=r1
+Y(3,2)=theta2
+NU=0
+ND=0
+IFLAG=1
+
+CALL TWODQ(F,2,X,Y,1.E-08,1,200,32000,u,ERR,NU,ND, NEVALS,IFLAG,DATA,IWORK,id)
+!PRINT*,u,ERR,NEVALS,IFLAG
+end subroutine integu
+
+real*8 FUNCTION F(t,theta,id)
+use para
+implicit none
+real*8 t,theta
+integer id(3)
+F=t/dsqrt(cyl(3,id(1),id(2),id(3))**2+t**2+cyl(1,id(1),id(2),id(3))**2-2.d0*cyl(1,id(1),id(2),id(3))*t*dcos(cyl(2,id(1),id(2),id(3))-theta))
+RETURN
+END FUNCTION F
+

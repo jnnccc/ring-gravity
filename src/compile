@@ -1,0 +1,4 @@
+#! /bin/bash
+
+#ifort testwodq.f90 *.f -o test
+ifort quadring.f90 libtwodq.a -o ring1

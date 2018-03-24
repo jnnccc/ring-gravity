@@ -1,0 +1,8 @@
+#! /bin/bash
+
+if [[ $# > 4 ]];then
+echo "num great 4"
+else 
+echo "num little 4"
+fi
+

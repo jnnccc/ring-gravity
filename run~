@@ -1,0 +1,4 @@
+#! /bin/bash
+
+#./saturn 1 saturn_grv8 
+./saturn "$@" 

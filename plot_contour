@@ -1,0 +1,13 @@
+#! /bin/bash
+
+if [[ $# > 4 ]];then
+echo $#
+fi
+
+
+if [[ $# > 8 ]];then
+echo $#
+fi
+
+
+

@@ -1,0 +1,23 @@
+# Makefile options for the INTEL compiler,not  optimized
+
+# Fortran compiler
+FC=ifort
+CC=g++
+# Options for Fortran compiler for debugging:
+#FFLAGS=  -cm -O -mp1 -assume byterecl  
+FFLAGS=  -O2 -g -traceback -openmp -assume byterecl -CB #-Wl,--end-group  
+CFLAGS=  -D_FILE_OFFSET_BITS=64 -D_LARGE_FILE 
+# "ranlib" command: if it is not needed, use "RANLIB=touch"
+RANLIB=ranlib
+#VPATH=../include
+
+# Implicit rule for compiling f90  files
+.SUFFIXES: .f90 .cpp
+
+%.o : %.mod
+
+.f90.o:
+	$(FC) $(FFLAGS) -c $*.f90 -o $*.o 
+.cpp.o:
+	$(CC) $(CFLAGS) -c $*.cpp -o $*.o
+

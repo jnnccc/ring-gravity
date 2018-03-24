@@ -1,0 +1,75 @@
+subroutine integf(rthrea,f)
+!完成单个环的引力积分
+!xbf    土星固定系坐标
+!rthrea 环的内径和外径(m)
+!f		固定系坐标下的受力
+
+!use para
+implicit none
+real*8,parameter:: pi=dacos(-1.d0)
+real*8:: xbf(3),f(3),rthrea(2)
+REAL*8:: X(3,2),Y(3,2),DATA(4500),RES,ERR,theta1,theta2
+INTEGER IWORK(1000),NU,ND,NEVALS,IFLAG,i,j,k
+EXTERNAL intz,inty,intz
+!id(1)=i
+!id(2)=j
+!id(3)=k
+!print*,id
+theta1=0.d0
+theta2=2.d0*pi
+X(1,1)=rthrea(1)
+Y(1,1)=theta1
+X(2,1)=rthrea(2)
+Y(2,1)=theta1
+X(3,1)=rthrea(2)
+Y(3,1)=theta2
+X(1,2)=rthrea(1)
+Y(1,2)=theta1
+X(2,2)=rthrea(2)
+Y(2,2)=theta2
+X(3,2)=rthrea(1)
+Y(3,2)=theta2
+NU=0
+ND=0
+IFLAG=1
+
+CALL TWODQ(intx,2,X,Y,1.E-08,1,200,32000,f(1),ERR,NU,ND, NEVALS,IFLAG,DATA,IWORK,id)
+CALL TWODQ(inty,2,X,Y,1.E-08,1,200,32000,f(2),ERR,NU,ND, NEVALS,IFLAG,DATA,IWORK,id)
+CALL TWODQ(intz,2,X,Y,1.E-08,1,200,32000,f(3),ERR,NU,ND, NEVALS,IFLAG,DATA,IWORK,id)
+!PRINT*,u,ERR,NEVALS,IFLAG
+end subroutine integf
+
+real*8 FUNCTION intx(t,theta)
+use para
+implicit none
+real*8 t,theta,r(3)
+r(1)=t*dcos(theta)-cyl(4)
+r(2)=t*dsin(theta)-cyl(5)
+r(3)=-cyl(6)
+intx=(t/(cyl(3)**2+t**2+cyl(1)**2-2.d0*cyl(1)*t*dcos(cyl(2)-theta)))*r(1)/dsqrt(dot_product(r,r))
+RETURN
+END FUNCTION intx
+
+real*8 FUNCTION inty(t,theta)
+use para
+implicit none
+real*8 t,theta,r(3)
+r(1)=t*dcos(theta)-cyl(4)
+r(2)=t*dsin(theta)-cyl(5)
+r(3)=-cyl(6)
+inty=(t/(cyl(3)**2+t**2+cyl(1)**2-2.d0*cyl(1)*t*dcos(cyl(2)-theta)))*r(2)/dsqrt(dot_product(r,r))
+RETURN
+END FUNCTION inty
+
+real*8 FUNCTION intz(t,theta)
+use para
+implicit none
+real*8 t,theta,r(3)
+r(1)=t*dcos(theta)-cyl(4)
+r(2)=t*dsin(theta)-cyl(5)
+r(3)=-cyl(6)
+intz=(t/(cyl(3)**2+t**2+cyl(1)**2-2.d0*cyl(1)*t*dcos(cyl(2)-theta)))*r(3)/dsqrt(dot_product(r,r))
+RETURN
+END FUNCTION intz
+
+

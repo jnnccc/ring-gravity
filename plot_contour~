@@ -1,0 +1,67 @@
+#! /bin/bash
+
+if [[ $# > 4 ]];then
+echo $#
+fi
+
+
+if [[ $# > 8 ]];then
+echo $#
+fi
+
+
+
+tempfile="/tmp/contur-"$RANDOM
+awk -v one="$2" -v two="$3" -v three="$4" '{print $one,$two,$three}' $1  >$tempfile
+case $5 in
+     ps)
+         term='set terminal postscript eps color enhanced solid "Helvetica" 12'
+         out='set output "gplot.eps"'
+         ;;
+     *)
+         term='set term x11  enhanced font "SimHei,16" title "contour plot" size 1440,900 position 0,0'
+         ;;
+esac
+xl="set xlabel "'"'$6'"'
+yl="set ylabel "'"'$7'"'
+
+case $8 in
+     gray)
+         color="set palette gray negative"
+         ;;
+     *)
+         color="set palette rgbformulae 33,13,10"
+         ;;
+esac
+
+if [[ $# > 8 ]];then
+xrang="set xrange [$9]"
+yrang="set yrang  [$10]"
+echo $xrang
+echo $yrang
+echo $#
+fi
+
+
+datafile='"'$tempfile'"'
+plot="plot $datafile with image"
+gnuplot << EOF
+$term
+$out
+reset
+unset key
+$xrang
+$yrang
+
+$color
+$xl
+$yl
+
+set format cb "%.1t*e%+02T"
+set cntrparam levels  10
+#set cblabel "[m/s^2]" rotate by 0 offset -5,-20  
+
+$plot
+pause  mouse button2
+EOF
+
